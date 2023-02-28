@@ -39,8 +39,6 @@ services:
       - host.docker.internal:${CUSTOM_HOST_GATEWAY:-host-gateway}
     volumes:
       - ./:/srv/www
-      - "~/.composer/cache:/.composer/cache"
-      - "~/.npm:/.npm"
     networks:
       - "shopware"
     healthcheck:

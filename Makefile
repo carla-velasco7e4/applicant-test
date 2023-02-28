@@ -91,7 +91,7 @@ shopware/download/production:
 	cp -r $$(ls|grep 'shopware-')/. .;
 	rm -r $$(ls|grep 'shopware-');
 	rm shopware.tar.gz;
-	composer config description 'Shopware 6 Project Playground';
+	$(DOCKER_COMPOSE) run -T --rm php-fpm composer config description 'Shopware 6 Project Playground';
 
 .PHONY: shopware/system/setup
 shopware/system/setup:

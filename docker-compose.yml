@@ -16,7 +16,7 @@ services:
       - "shopware"
 
   php-fpm:
-    image: ghcr.io/flagbit/shopware/6.4/php-fpm/8.1/development:0.1.3
+    image: ghcr.io/flagbit/shopware/6.5/php-fpm/8.2/development:0.2.0
     user: $USER_ID
     depends_on:
       - mysql
@@ -24,9 +24,9 @@ services:
       - DATABASE_URL=mysql://app:app@mysql:3306/shopware
       - APP_URL=http://localhost:8080
       - INSTANCE_ID=
-      - SHOPWARE_ES_ENABLED=1
+      - SHOPWARE_ES_ENABLED=0
       - SHOPWARE_ES_HOSTS=elasticsearch:9200
-      - SHOPWARE_ES_INDEXING_ENABLED=1
+      - SHOPWARE_ES_INDEXING_ENABLED=0
       - SHOPWARE_ES_INDEX_PREFIX=sw
       - SHOPWARE_ES_THROW_EXCEPTION=0
       - SHOPWARE_CDN_STRATEGY_DEFAULT=id
@@ -35,10 +35,12 @@ services:
       - PUPPETEER_SKIP_DOWNLOAD=true
       - XDEBUG_MODE=${XDEBUG_MODE:-off}
       - PHP_IDE_CONFIG=serverName=localhost
+      - LOCK_DSN=flock
     extra_hosts:
       - host.docker.internal:${CUSTOM_HOST_GATEWAY:-host-gateway}
     volumes:
       - ./:/srv/www
+      - ./.npm:/.npm
     networks:
       - "shopware"
     healthcheck:

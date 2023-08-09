@@ -85,13 +85,15 @@ docker-compose.override.yml:
 
 .PHONY: shopware/download/production
 shopware/download/production:
-	curl -L $$(curl -s 'https://api.github.com/repos/shopware/production/releases/latest'|jq -r '.tarball_url') -o shopware.tar.gz;
-	tar xzf shopware.tar.gz;
-	rm -r $$(ls|grep 'shopware-')/README.md $$(ls|grep 'shopware-')/.gitlab* $$(ls|grep 'shopware-')/.github $$(ls|grep 'shopware-')/.dockerignore $$(ls|grep 'shopware-')/Dockerfile $$(ls|grep 'shopware-')/docker-compose.yml;
-	cp -r $$(ls|grep 'shopware-')/. .;
-	rm -r $$(ls|grep 'shopware-');
-	rm shopware.tar.gz;
+	mkdir -p .npm;
+	$(DOCKER_COMPOSE) run -T --rm php-fpm composer create-project shopware/production shopware;
+	rm shopware/docker-compose.override.yml shopware/docker-compose.yml shopware/README.md;
+	cp -r shopware/. .;
+	rm -r shopware;
 	$(DOCKER_COMPOSE) run -T --rm php-fpm composer config description 'Shopware 6 Project Playground';
+	$(DOCKER_COMPOSE) run -T --rm php-fpm composer config name 'flagbit/shopware-playground';
+	$(DOCKER_COMPOSE) run -T --rm php-fpm composer update --lock;
+	$(DOCKER_COMPOSE) run -T --rm php-fpm composer require shopware/dev-tools;
 
 .PHONY: shopware/system/setup
 shopware/system/setup:

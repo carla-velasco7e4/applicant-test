@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="applicant_plugin.product_page_loaded_subscriber" class="ApplicantPlugin\Subscriber\ProductPageLoadedSubscriber">
+            <argument type="service" id="product.repository"/>
+            <tag name="kernel.event_subscriber" />
+        </service>
+
+        <service id="ApplicantPlugin\Entity\CustomProductEntity" class="ApplicantPlugin\Entity\CustomProductEntity">
+            <tag name="doctrine.orm.entity" />
+        </service>
+
+        <service id="applicant_plugin.most_viewed_products_report_command" class="ApplicantPlugin\Command\MostViewedProductsReportCommand">
+            <tag name="console.command" />
+            <argument type="service" id="Shopware\Storefront\Page\Product\ProductPageLoader" />
+        </service>
+    </services>
+</container>
